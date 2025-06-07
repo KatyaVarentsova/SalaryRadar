@@ -1,0 +1,35 @@
+.container {
+    color: blue;
+}
+
+.title_page{
+    text-align: start;
+}
+
+.header {
+    margin-bottom: 40px;
+    color: var(--bs-success);
+    font-size: 32px;
+    text-align: start;
+}
+
+.block {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    text-align: start;
+}
+
+.checkbox {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.category_block{
+    display: grid;
+    grid-template-columns: 60px 60px;
+    gap: 60px;
+    text-align: start;
+    flex-direction: column;
+}

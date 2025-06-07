@@ -1,0 +1,291 @@
+import styles from './FilterPage.module.css';
+import { useNavigate } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import React, { useState } from 'react';
+import Form from 'react-bootstrap/Form';
+//import axios from 'axios';
+
+
+export const FilterPage = () => {
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        jobTitle: '',
+        city: '',
+        experience: {
+            noExperience: false,
+            from1To3: false,
+            from3To6: false,
+            moreThan6: false,
+        },
+        age: {
+            age18_30: false,
+            age30_40: false,
+            age40_50: false,
+            age60plus: false,
+        },
+        source: {
+            hh: false,
+        },
+        education: '',
+        workFormat: {
+            onSite: false,
+            remotely: false,
+            hybrid: false,
+            journey: false,
+
+        },
+        car: false,
+        license: {
+            A: false,
+            B: false,
+            C: false,
+            D: false,
+            E: false,
+            BE: false,
+            CE: false,
+            DE: false,
+            Tm: false,
+            Tb: false,
+        }
+
+
+    })
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const payload = {
+            jobTitle: formData.jobTitle,
+            city: formData.city,
+            experience: Object.entries(formData.experience)
+                .filter(([_, checked]) => checked)
+                .map(([label]) => label),
+            age: Object.entries(formData.age)
+                .filter(([_, checked]) => checked)
+                .map(([label]) => label),
+            source: Object.entries(formData.source)
+                .filter(([_, checked]) => checked)
+                .map(([label]) => label),
+            education: '',
+            workFormat: Object.entries(formData.workFormat)
+                .filter(([_, checked]) => checked)
+                .map(([label]) => label),
+            car: formData.car,
+            license: Object.entries(formData.license)
+                .filter(([_, checked]) => checked)
+                .map(([label]) => label),
+
+        };
+
+        console.log('Отправляем JSON:', JSON.stringify(payload, null, 2));
+
+        /*try {
+            const response = await axios.post('https://example.com/api/form', payload);
+            console.log('Успешно отправлено!', response.data);
+        } catch (err) {
+            console.error('Ошибка при отправке:', err);
+        }*/
+        navigate('/results')
+    };
+    
+
+
+
+
+
+
+    return (
+        <div className={styles.container}>
+            <h2 className={styles.title_page}>Поиск вакансий</h2>
+            <h3 className={styles.header}>Фильтры</h3>
+            <Form onSubmit={handleSubmit}>
+                <div className={styles.block}>
+                    <div>
+                        {/* Должность */}
+                        <Form.Group className="mb-3">
+                            <Form.Label>Должность</Form.Label>
+                            <Form.Control type="text" placeholder="Доставщик" value={formData.jobTitle}
+                                onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })} />
+                        </Form.Group>
+                        {/* Город */}
+                        <Form.Group className="mb-3">
+                            <Form.Label>Город</Form.Label>
+                            <Form.Control type="text" placeholder="Москва" value={formData.city}
+                                onChange={(e) => setFormData({ ...formData, city: e.target.value })} />
+                        </Form.Group>
+                        {/* Опыт работы */}
+                        <Form.Group>
+                            <Form.Label>Опыт работы</Form.Label>
+                            {[
+                                ['noExperience', 'Нет опыта'],
+                                ['from1To3', 'От 1 до 3 лет'],
+                                ['from3To6', 'От 3 до 6 лет'],
+                                ['moreThan6', 'Более 6 лет'],
+                            ].map(([key, label]) => (
+                                <Form.Check
+                                    key={key}
+                                    type="checkbox"
+                                    label={label}
+                                    checked={formData.experience[key as keyof typeof formData.experience]}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            experience: {
+                                                ...formData.experience,
+                                                [key]: e.target.checked,
+                                            },
+                                        })
+                                    }
+                                />
+                            ))}
+                        </Form.Group>
+                        {/* Возраст */}
+                        <Form.Group className={styles.checkbox}>
+                            <Form.Label>Возраст</Form.Label>
+                            {[
+                                ['age18_30', '18 - 30'],
+                                ['age30_40', '30 - 40'],
+                                ['age40_50', '40 - 50'],
+                                ['age60plus', 'от 60 лет'],
+                            ].map(([key, label]) => (
+                                <Form.Check
+                                    key={key}
+                                    type="checkbox"
+                                    label={label}
+                                    checked={formData.age[key as keyof typeof formData.age]}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            age: {
+                                                ...formData.age,
+                                                [key]: e.target.checked,
+                                            },
+                                        })
+                                    }
+                                />
+                            ))}
+                        </Form.Group>
+                        {/*Источники для поиска*/}
+                        <Form.Group className={styles.checkbox}>
+                            <Form.Label>Источники для поиска</Form.Label>
+                            {[
+                                ['hh', 'HH.ru'],
+                            ].map(([key, label]) => (
+                                <Form.Check
+                                    key={key}
+                                    type="checkbox"
+                                    label={label}
+                                    checked={formData.source[key as keyof typeof formData.source]}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            source: {
+                                                ...formData.source,
+                                                [key]: e.target.checked,
+                                            },
+                                        })
+                                    }
+                                />
+                            ))}
+                        </Form.Group>
+                    </div>
+                    <div>
+                        {/* Образование */}
+                        <Form.Group className={styles.checkbox}>
+                            <Form.Label>Образование</Form.Label>
+                            {[
+                                ['no', 'Не требуется или не указано'],
+                                ['average', 'Среднее профессиональное'],
+                                ['higher', 'Высшее'],
+                            ].map(([key, label]) => (
+                                <Form.Check
+                                    key={key}
+                                    inline
+                                    label={label}
+                                    type="radio"
+                                    name="education"
+                                    checked={formData.education === key}
+                                    onChange={() => setFormData({ ...formData, education: key })}
+                                />
+                            ))}
+                        </Form.Group>
+                        {/* Формат работы */}
+                        <Form.Group className={styles.checkbox}>
+                            <Form.Label>Формат работы</Form.Label>
+                            {[
+                                ['onSite', 'На месте работодателя'],
+                                ['remotely', 'Удалённо'],
+                                ['hybrid', 'Гибрид'],
+                                ['journey', 'Разъездной'],
+                            ].map(([key, label]) => (
+                                <Form.Check
+                                    key={key}
+                                    type="checkbox"
+                                    label={label}
+                                    checked={formData.workFormat[key as keyof typeof formData.workFormat]}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            workFormat: {
+                                                ...formData.workFormat,
+                                                [key]: e.target.checked,
+                                            },
+                                        })
+                                    }
+                                />
+                            ))}
+                        </Form.Group>
+                        {/* Наличие машины */}
+                        <Form.Group>
+                            <Form.Check
+                                type="switch"
+                                id="custom-switch"
+                                label="Наличие машины"
+                                checked={formData.car}
+                                onChange={(e) => setFormData({ ...formData, car: e.target.checked })}
+                            />
+                        </Form.Group>
+                        {/* Права категории */}
+                        <Form.Group className={styles.license}>
+                            <Form.Label>Права категории</Form.Label>
+                            <div className={styles.license__block}>
+                                {[
+                                    ['A', 'A'],
+                                    ['B', 'B'],
+                                    ['C', 'C'],
+                                    ['D', 'D'],
+                                    ['E', 'E'],
+                                    ['BE', 'BE'],
+                                    ['CE', 'CE'],
+                                    ['DE', 'DE'],
+                                    ['Tm', 'Tm'],
+                                    ['Tb', 'Tb'],
+                                ].map(([key, label]) => (
+                                    <Form.Check
+                                        key={key}
+                                        type="checkbox"
+                                        label={label}
+                                        checked={formData.license[key as keyof typeof formData.license]}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                license: {
+                                                    ...formData.license,
+                                                    [key]: e.target.checked,
+                                                },
+                                            })
+                                        }
+                                    />
+                                ))}
+                            </div>
+                        </Form.Group>
+                    </div>
+                </div>
+                <Button type='submit' variant="success">
+                    Провести анализ
+                </Button>
+            </Form >
+
+        </div >
+    );
+};
