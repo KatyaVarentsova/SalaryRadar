@@ -88,7 +88,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     });
 
     const queryString = queryParams.toString();
-    const url = `https://example.com/api/results?${queryString}`; //  твой адрес API
+    const url = `http://localhost:8081/api/v1/vacancies/filter?${queryString}`; //  твой адрес API
 
     try {
         const response = await axios.get(url);
@@ -114,7 +114,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                         {/* Должность */}
                         <Form.Group>
                             <Form.Label className={styles.from_label}>Должность</Form.Label>
-                            <Form.Control className={styles.from_text} type="text" placeholder="Доставщик" value={formData.jobTitle}
+                            <Form.Control required className={styles.from_text} type="text" placeholder="Доставщик" value={formData.jobTitle}
                                 onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })} />
                         </Form.Group>
                         {/* Город */}
@@ -184,6 +184,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                                 ['hh', 'HH.ru'],
                             ].map(([key, label]) => (
                                 <Form.Check
+                                    required
                                     className={styles.from_text}
                                     key={key}
                                     type="checkbox"
