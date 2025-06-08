@@ -75,6 +75,7 @@ export const FilterPage = () => {
                 .filter(([_, checked]) => checked)
                 .map(([label]) => label),
         };
+        const qt = encodeURIComponent(formData.jobTitle);
 
         // Преобразуем payload в строку запроса
         const queryParams = new URLSearchParams();
@@ -103,7 +104,7 @@ export const FilterPage = () => {
             console.log('Отчёт:', reportResponse.data);
 
             // Передача обоих JSON через навигацию
-            navigate('/results', {
+            navigate(`/results?jobTitle=${qt}`, {
                 state: {
                     vacancies: filterResponse.data,
                     report: reportResponse.data,
@@ -111,7 +112,7 @@ export const FilterPage = () => {
             });
         } catch (error) {
             console.error('Ошибка при получении данных:', error);
-            navigate('/results');
+            
         }
     };
 
