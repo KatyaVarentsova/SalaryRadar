@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-//import axios from 'axios';
+import axios from 'axios';
 
 
 export const FilterPage = () => {
@@ -51,42 +51,56 @@ export const FilterPage = () => {
 
     })
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-        const payload = {
-            jobTitle: formData.jobTitle,
-            city: formData.city,
-            experience: Object.entries(formData.experience)
-                .filter(([_, checked]) => checked)
-                .map(([label]) => label),
-            age: Object.entries(formData.age)
-                .filter(([_, checked]) => checked)
-                .map(([label]) => label),
-            source: Object.entries(formData.source)
-                .filter(([_, checked]) => checked)
-                .map(([label]) => label),
-            education: '',
-            workFormat: Object.entries(formData.workFormat)
-                .filter(([_, checked]) => checked)
-                .map(([label]) => label),
-            car: formData.car,
-            license: Object.entries(formData.license)
-                .filter(([_, checked]) => checked)
-                .map(([label]) => label),
-
-        };
-
-        console.log('Отправляем JSON:', JSON.stringify(payload, null, 2));
-
-        /*try {
-            const response = await axios.post('https://example.com/api/form', payload);
-            console.log('Успешно отправлено!', response.data);
-        } catch (err) {
-            console.error('Ошибка при отправке:', err);
-        }*/
-        navigate('/results')
+    const payload = {
+        jobTitle: formData.jobTitle,
+        city: formData.city,
+        experience: Object.entries(formData.experience)
+            .filter(([_, checked]) => checked)
+            .map(([label]) => label),
+        age: Object.entries(formData.age)
+            .filter(([_, checked]) => checked)
+            .map(([label]) => label),
+        source: Object.entries(formData.source)
+            .filter(([_, checked]) => checked)
+            .map(([label]) => label),
+        education: '',
+        workFormat: Object.entries(formData.workFormat)
+            .filter(([_, checked]) => checked)
+            .map(([label]) => label),
+        car: formData.car.toString(), // Преобразуем boolean в строку
+        license: Object.entries(formData.license)
+            .filter(([_, checked]) => checked)
+            .map(([label]) => label),
     };
+
+    // Преобразуем payload в строку запроса
+    const queryParams = new URLSearchParams();
+
+    Object.entries(payload).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+            value.forEach(v => queryParams.append(key, v));
+        } else {
+            queryParams.append(key, encodeURIComponent(String(value))); //  Преобразуем всё в строку
+        }
+    });
+
+    const queryString = queryParams.toString();
+    const url = `https://example.com/api/results?${queryString}`; //  твой адрес API
+
+    try {
+        const response = await axios.get(url);
+        console.log('Ответ от бэка:', response.data);
+
+        // Можешь сохранить ответ в состояние, или передать при навигации:
+        navigate('/results', { state: response.data });
+    } catch (error) {
+        console.error('Ошибка при запросе:', error);
+        navigate('/results');
+    }
+};
 
     return (
         <div className={styles.container}>

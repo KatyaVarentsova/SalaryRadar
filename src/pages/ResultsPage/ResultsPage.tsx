@@ -1,8 +1,8 @@
 import styles from './ResultsPage.module.css';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { BarChart, LineChart, PieChart } from '../../components';
-import React, { useEffect, useState } from 'react';
+import { BarChart, LineChart, PieChart, LoadingPage } from '../../components';
+import { useEffect, useState } from 'react';
 
 interface VacancyData {
     jobTitle: string;
@@ -23,8 +23,8 @@ interface VacancyData {
     };
     yearMoney: {
         name: string;
-        horizontal: number[];
-        vertical: string[];
+        horizontal: string[];
+        vertical: number[];
     }
 }
 
@@ -49,9 +49,9 @@ const fakeFetch = () =>
                     data: [40, 28, 120, 300],
                 },
                 yearMoney: {
-                    name: '',
-                    horizontal: [40000, 60000, 80000, 70000],
-                    vertical: ['Нет опыта', 'От 1 года до 3 лет', 'От 3 до 6 лет', 'Более 6 лет'],
+                    name: 'Опыт работы',
+                    horizontal: ['Нет опыта', 'От 1 года до 3 лет', 'От 3 до 6 лет', 'Более 6 лет'],
+                    vertical: [40000, 60000, 80000, 70000],
                 }
             });
         }, 1000)
@@ -67,7 +67,7 @@ export const ResultsPage = () => {
         });
     }, []);
 
-    if (!data) return <div>Загрузка...</div>;
+    if (!data) return <LoadingPage/>;
 
     return (
         <div className={styles.container}>
@@ -77,7 +77,7 @@ export const ResultsPage = () => {
             <div className={styles.grid_container}>
                 <div className={styles.item1}>
                     <h3 className={styles.title_filter}>{data.jobTitle}</h3>
-                    <p className={styles.text}>от {data.from} ₽ — до {data.to} ₽</p>
+                    <p className={styles.text}>от {data.from} ₽ — <br/>до {data.to} ₽</p>
                     <div>
                         <span className={styles.mini_header}>средняя зарплата</span>
                         <p className={styles.text}>{data.average} ₽</p>
@@ -106,7 +106,11 @@ export const ResultsPage = () => {
                     />
                 </div>
                 <div className={styles.item2}>
-                    <LineChart />
+                    <LineChart
+                        title={data.yearMoney.name}
+                        labels={data.yearMoney.horizontal}
+                        values={data.yearMoney.vertical}
+                    />
                 </div>
             </div>
 
