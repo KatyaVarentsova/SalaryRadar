@@ -1,1 +1,0 @@
-export {sendFormData} from './SendFormData'

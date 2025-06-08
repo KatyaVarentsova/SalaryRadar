@@ -1,16 +1,24 @@
-.header {
-    margin-bottom: 40px;
-    color: var(--bs-success);
-    font-size: 32px;
-}
-
-.block {
-    height: 60vh;
+.container {
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .button {
     font-size: 24px;
+    background-color: #27465A;
+    border-color: #27465A;
 }
+
+.button:hover, .button:focus {
+    background-color: #3C6374;
+    border-color: #3C6374;
+}
+
+:not(.button)+.button:active {
+    background-color: #457F8B;
+    border-color: #457F8B;
+}
+

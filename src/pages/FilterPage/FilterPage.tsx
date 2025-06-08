@@ -87,35 +87,31 @@ export const FilterPage = () => {
         }*/
         navigate('/results')
     };
-    
-
-
-
-
-
 
     return (
         <div className={styles.container}>
-            <h2 className={styles.title_page}>Поиск вакансий</h2>
-            <h3 className={styles.header}>Фильтры</h3>
+            <div className={styles.header}>
+                <h2 className={styles.title_page}>Поиск вакансий</h2>
+            </div>
+            <h3 className={styles.title_filter}>Фильтры</h3>
             <Form onSubmit={handleSubmit}>
                 <div className={styles.block}>
-                    <div>
+                    <div className={styles.form_groups}>
                         {/* Должность */}
-                        <Form.Group className="mb-3">
-                            <Form.Label>Должность</Form.Label>
-                            <Form.Control type="text" placeholder="Доставщик" value={formData.jobTitle}
+                        <Form.Group>
+                            <Form.Label className={styles.from_label}>Должность</Form.Label>
+                            <Form.Control className={styles.from_text} type="text" placeholder="Доставщик" value={formData.jobTitle}
                                 onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })} />
                         </Form.Group>
                         {/* Город */}
-                        <Form.Group className="mb-3">
-                            <Form.Label>Город</Form.Label>
-                            <Form.Control type="text" placeholder="Москва" value={formData.city}
+                        <Form.Group>
+                            <Form.Label className={styles.from_label}>Город</Form.Label>
+                            <Form.Control className={styles.from_text} type="text" placeholder="Москва" value={formData.city}
                                 onChange={(e) => setFormData({ ...formData, city: e.target.value })} />
                         </Form.Group>
                         {/* Опыт работы */}
                         <Form.Group>
-                            <Form.Label>Опыт работы</Form.Label>
+                            <Form.Label className={styles.from_label}>Опыт работы</Form.Label>
                             {[
                                 ['noExperience', 'Нет опыта'],
                                 ['from1To3', 'От 1 до 3 лет'],
@@ -123,6 +119,7 @@ export const FilterPage = () => {
                                 ['moreThan6', 'Более 6 лет'],
                             ].map(([key, label]) => (
                                 <Form.Check
+                                    className={styles.from_text}
                                     key={key}
                                     type="checkbox"
                                     label={label}
@@ -141,7 +138,7 @@ export const FilterPage = () => {
                         </Form.Group>
                         {/* Возраст */}
                         <Form.Group className={styles.checkbox}>
-                            <Form.Label>Возраст</Form.Label>
+                            <Form.Label className={styles.from_label}>Возраст</Form.Label>
                             {[
                                 ['age18_30', '18 - 30'],
                                 ['age30_40', '30 - 40'],
@@ -149,6 +146,7 @@ export const FilterPage = () => {
                                 ['age60plus', 'от 60 лет'],
                             ].map(([key, label]) => (
                                 <Form.Check
+                                    className={styles.from_text}
                                     key={key}
                                     type="checkbox"
                                     label={label}
@@ -167,11 +165,12 @@ export const FilterPage = () => {
                         </Form.Group>
                         {/*Источники для поиска*/}
                         <Form.Group className={styles.checkbox}>
-                            <Form.Label>Источники для поиска</Form.Label>
+                            <Form.Label className={styles.from_label}>Источники для поиска</Form.Label>
                             {[
                                 ['hh', 'HH.ru'],
                             ].map(([key, label]) => (
                                 <Form.Check
+                                    className={styles.from_text}
                                     key={key}
                                     type="checkbox"
                                     label={label}
@@ -189,16 +188,17 @@ export const FilterPage = () => {
                             ))}
                         </Form.Group>
                     </div>
-                    <div>
+                    <div className={styles.form_groups}>
                         {/* Образование */}
                         <Form.Group className={styles.checkbox}>
-                            <Form.Label>Образование</Form.Label>
+                            <Form.Label className={styles.from_label}>Образование</Form.Label>
                             {[
                                 ['no', 'Не требуется или не указано'],
                                 ['average', 'Среднее профессиональное'],
                                 ['higher', 'Высшее'],
                             ].map(([key, label]) => (
                                 <Form.Check
+                                    className={styles.from_text}
                                     key={key}
                                     inline
                                     label={label}
@@ -211,7 +211,7 @@ export const FilterPage = () => {
                         </Form.Group>
                         {/* Формат работы */}
                         <Form.Group className={styles.checkbox}>
-                            <Form.Label>Формат работы</Form.Label>
+                            <Form.Label className={styles.from_label}>Формат работы</Form.Label>
                             {[
                                 ['onSite', 'На месте работодателя'],
                                 ['remotely', 'Удалённо'],
@@ -219,6 +219,7 @@ export const FilterPage = () => {
                                 ['journey', 'Разъездной'],
                             ].map(([key, label]) => (
                                 <Form.Check
+                                    className={styles.from_text}
                                     key={key}
                                     type="checkbox"
                                     label={label}
@@ -236,8 +237,9 @@ export const FilterPage = () => {
                             ))}
                         </Form.Group>
                         {/* Наличие машины */}
-                        <Form.Group>
+                        <Form.Group className={styles.from_label}>
                             <Form.Check
+                                className={styles.from_text}
                                 type="switch"
                                 id="custom-switch"
                                 label="Наличие машины"
@@ -247,8 +249,8 @@ export const FilterPage = () => {
                         </Form.Group>
                         {/* Права категории */}
                         <Form.Group className={styles.license}>
-                            <Form.Label>Права категории</Form.Label>
-                            <div className={styles.license__block}>
+                            <Form.Label className={styles.from_label}>Права категории</Form.Label>
+                            <div className={styles.category_block}>
                                 {[
                                     ['A', 'A'],
                                     ['B', 'B'],
@@ -262,6 +264,7 @@ export const FilterPage = () => {
                                     ['Tb', 'Tb'],
                                 ].map(([key, label]) => (
                                     <Form.Check
+                                        className={styles.from_text}
                                         key={key}
                                         type="checkbox"
                                         label={label}
@@ -281,8 +284,8 @@ export const FilterPage = () => {
                         </Form.Group>
                     </div>
                 </div>
-                <Button type='submit' variant="success">
-                    Провести анализ
+                <Button type='submit' variant="success" className={styles.button}>
+                    Найти
                 </Button>
             </Form >
 

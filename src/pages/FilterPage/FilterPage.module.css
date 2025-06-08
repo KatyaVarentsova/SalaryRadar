@@ -1,23 +1,60 @@
 .container {
-    color: blue;
-}
-
-.title_page{
-    text-align: start;
+    padding: auto 150px;
 }
 
 .header {
-    margin-bottom: 40px;
-    color: var(--bs-success);
-    font-size: 32px;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    box-shadow: 0 5px 4px 0 rgba(0, 0, 0, 0.25);
+    border-radius: 0 0 80px 80px;
+    padding: 40px 140px;
+    margin-bottom: 70px;
+}
+
+.title_page {
+    margin: auto 150px;
     text-align: start;
+    font-weight: 400;
+    font-size: 64px;
+    color: #021526;
+}
+
+.title_filter {
+    margin-bottom: 40px;
+    text-align: start;
+    font-weight: 400;
+    font-size: 40px;
+    color: #27465a;
+    margin-bottom: 40px;
 }
 
 .block {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 200px;
     text-align: start;
+}
+
+.form_groups {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.from_label {
+    font-weight: 400;
+    font-size: 24px;
+    color: #3c6374;
+}
+
+.from_text {
+    font-weight: 400;
+    font-size: 24px;
+    color: #27465a;
 }
 
 .checkbox {
@@ -26,10 +63,31 @@
     align-items: start;
 }
 
-.category_block{
+.category_block {
     display: grid;
     grid-template-columns: 60px 60px;
-    gap: 60px;
+    grid-template-rows: repeat(5, 50px);
+    gap: 0 60px;
     text-align: start;
-    flex-direction: column;
+}
+
+.button {
+    font-size: 24px;
+    background-color: #27465A;
+    border-color: #27465A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 40px;
+}
+
+.button:hover, .button:focus {
+    background-color: #3C6374;
+    border-color: #3C6374;
+}
+
+:not(.button)+.button:active {
+    background-color: #457F8B;
+    border-color: #457F8B;
 }

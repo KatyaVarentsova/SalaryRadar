@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,6 +10,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
+// Регистрируем модули Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -18,33 +20,38 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Bar Chart',
-    },
-  },
-};
-
-const labels = [10000, 20000, 30000, 40000, 50000];
-const arr1 = [10, 25, 17, 14, 2]
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: arr1,
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-  ],
-};
-
-export function BarChart() {
-  return <Bar options={options} data={data} />;
+// Типизация пропсов
+interface BarChartProps {
+  title: string;
+  labels: (string | number)[];
+  values: number[];
 }
+
+// Компонент BarChart
+export const BarChart: React.FC<BarChartProps> = ({ title, labels, values }) => {
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: title,
+        data: values,
+        backgroundColor: '#457F8B',
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: title,
+      },
+    },
+  };
+
+  return <Bar data={data} options={options} />;
+};
