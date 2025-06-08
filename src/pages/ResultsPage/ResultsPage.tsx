@@ -1,3 +1,4 @@
+import { VacanciesTable } from '../../components';
 import { useLocation } from 'react-router-dom';
 
 export const ResultsPage = () => {
@@ -8,10 +9,8 @@ export const ResultsPage = () => {
 
   return (
     <div>
-      <h2>Полные данные:</h2>
-      <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-        {JSON.stringify(data, null, 2)}
-      </pre>
+      <h2>Результаты поиска</h2>
+      <VacanciesTable vacancies={data} />
     </div>
   );
 };
