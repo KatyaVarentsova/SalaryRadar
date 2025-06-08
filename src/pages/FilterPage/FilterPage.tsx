@@ -51,56 +51,70 @@ export const FilterPage = () => {
 
     })
 
-const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-    const payload = {
-        jobTitle: formData.jobTitle,
-        city: formData.city,
-        experience: Object.entries(formData.experience)
-            .filter(([_, checked]) => checked)
-            .map(([label]) => label),
-        age: Object.entries(formData.age)
-            .filter(([_, checked]) => checked)
-            .map(([label]) => label),
-        source: Object.entries(formData.source)
-            .filter(([_, checked]) => checked)
-            .map(([label]) => label),
-        education: '',
-        workFormat: Object.entries(formData.workFormat)
-            .filter(([_, checked]) => checked)
-            .map(([label]) => label),
-        car: formData.car.toString(), // Преобразуем boolean в строку
-        license: Object.entries(formData.license)
-            .filter(([_, checked]) => checked)
-            .map(([label]) => label),
-    };
+        const payload = {
+            jobTitle: formData.jobTitle,
+            city: formData.city,
+            experience: Object.entries(formData.experience)
+                .filter(([_, checked]) => checked)
+                .map(([label]) => label),
+            age: Object.entries(formData.age)
+                .filter(([_, checked]) => checked)
+                .map(([label]) => label),
+            source: Object.entries(formData.source)
+                .filter(([_, checked]) => checked)
+                .map(([label]) => label),
+            education: '',
+            workFormat: Object.entries(formData.workFormat)
+                .filter(([_, checked]) => checked)
+                .map(([label]) => label),
+            car: formData.car.toString(), // Преобразуем boolean в строку
+            license: Object.entries(formData.license)
+                .filter(([_, checked]) => checked)
+                .map(([label]) => label),
+        };
+        const qt = encodeURIComponent(formData.jobTitle);
 
-    // Преобразуем payload в строку запроса
-    const queryParams = new URLSearchParams();
+        // Преобразуем payload в строку запроса
+        const queryParams = new URLSearchParams();
 
-    Object.entries(payload).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-            value.forEach(v => queryParams.append(key, v));
-        } else {
-            queryParams.append(key, encodeURIComponent(String(value))); //  Преобразуем всё в строку
+        Object.entries(payload).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+                value.forEach(v => queryParams.append(key, v));
+            } else {
+                queryParams.append(key, encodeURIComponent(String(value))); //  Преобразуем всё в строку
+            }
+        });
+
+        const queryString = queryParams.toString();
+
+        const filterUrl = `http://localhost:8081/api/v1/vacancies/filter?${queryString}`;
+        const reportUrl = `http://localhost:8081/api/v1/vacancies/report?${queryString}`;
+
+        try {
+            // Параллельные запросы
+            const [filterResponse, reportResponse] = await Promise.all([
+                axios.get(filterUrl),
+                axios.get(reportUrl)
+            ]);
+
+            console.log('Фильтрованные вакансии:', filterResponse.data);
+            console.log('Отчёт:', reportResponse.data);
+
+            // Передача обоих JSON через навигацию
+            navigate(`/results?jobTitle=${qt}`, {
+                state: {
+                    vacancies: filterResponse.data,
+                    report: reportResponse.data,
+                }
+            });
+        } catch (error) {
+            console.error('Ошибка при получении данных:', error);
+            
         }
-    });
-
-    const queryString = queryParams.toString();
-    const url = `https://example.com/api/results?${queryString}`; //  твой адрес API
-
-    try {
-        const response = await axios.get(url);
-        console.log('Ответ от бэка:', response.data);
-
-        // Можешь сохранить ответ в состояние, или передать при навигации:
-        navigate('/results', { state: response.data });
-    } catch (error) {
-        console.error('Ошибка при запросе:', error);
-        navigate('/results');
-    }
-};
+    };
 
     return (
         <div className={styles.container}>
@@ -114,7 +128,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                         {/* Должность */}
                         <Form.Group>
                             <Form.Label className={styles.from_label}>Должность</Form.Label>
-                            <Form.Control className={styles.from_text} type="text" placeholder="Доставщик" value={formData.jobTitle}
+                            <Form.Control required className={styles.from_text} type="text" placeholder="Доставщик" value={formData.jobTitle}
                                 onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })} />
                         </Form.Group>
                         {/* Город */}
@@ -184,6 +198,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                                 ['hh', 'HH.ru'],
                             ].map(([key, label]) => (
                                 <Form.Check
+                                    required
                                     className={styles.from_text}
                                     key={key}
                                     type="checkbox"
